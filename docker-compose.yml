@@ -1,16 +1,17 @@
 version: '2'
 services:
-  nginx:
-    image: nginx:latest
-    ports:
-        - "8080:80"
-        - "443:443"
-    links:
-        - php
-    volumes:
-        - ./:/var/www/mongo-client
-        - ./docker-files/nginx/mongo-client.conf:/etc/nginx/conf.d/mongo-client.conf
-    restart: always
+#  nginx:
+#    image: nginx:latest
+#    ports:
+#        - "8080:80"
+#        - "443:443"
+#    links:
+#        - php
+#    volumes:
+#        - ./:/var/www/mongo-client
+#        - ./docker-files/nginx/mongo-client.conf:/etc/nginx/conf.d/mongo-client.conf
+#        - ./docker-files/error.log:/var/log/nginx/mongo-client-error.log
+#    restart: always
   mongo:
     image: mongo:latest
     restart: always
@@ -20,12 +21,9 @@ services:
         - ./docker-files/mongo:/data/db
   php:
     image: serkin/php7-fpm-mongodb
-#    container_name: php-fpm
     volumes:
       - ./:/var/www/mongo-client
     links:
       - mongo
     environment:
       XDEBUG_CONFIG: "remote_host=192.168.0.104 remote_enable=1"
-
-# todo if app will be only cli, will remove nginx container
