@@ -1,22 +1,31 @@
 <?php
 
-namespace MongoClient;
-
+namespace MongoClient\Service;
 
 use Exception;
+use MongoClient\DI\ContainerInsertionTrait;
 
-class Console
+/**
+ * Class Console.
+ */
+class Console implements ConsoleInterface
 {
+    use ContainerInsertionTrait;
+
     const COMMAND_NAMESPACE = 'MongoClient\\Command\\';
 
+    /**
+     * Handle received command.
+     *
+     * @param $arguments
+     * @param $commandList
+     */
     public function handle($arguments, $commandList)
     {
         $commandName = $this->filterCommandName($arguments);
         try {
-            // todo move class creation
             $className = $this->findCommand($commandName, $commandList);
-            $className = self::COMMAND_NAMESPACE.$className;
-            $command = new $className;
+            $command = $this->createCommand($className);
             $commandResult = $command->run($arguments);
             $this->showResponse($commandResult);
         } catch (Exception $e) {
@@ -25,9 +34,25 @@ class Console
     }
 
     /**
+     * Create instance for command.
+     *
+     * @param $className
+     *
+     * @return mixed
+     */
+    public function createCommand($className)
+    {
+        // todo move class creation from here
+        $className = self::COMMAND_NAMESPACE.$className;
+
+        return new $className($this->getContainer());
+    }
+
+    /**
      * Return name of console command from array of arguments.
      *
      * @param $arguments
+     *
      * @return array
      */
     public function filterCommandName($arguments)
@@ -44,22 +69,30 @@ class Console
      *
      * @param $commandName
      * @param $commandList
+     *
      * @return mixed
+     *
      * @throws Exception
      */
     public function findCommand($commandName, $commandList)
     {
         $commandName = strtolower($commandName);
         if (!in_array($commandName, array_keys($commandList))) {
-            throw new Exception("Command not found!", 404);
+            throw new Exception('Command not found!', 404);
         }
 
         return $commandList[$commandName];
     }
 
+    /**
+     * Show result of command in terminal.
+     *
+     * @param $text
+     * @param string $type
+     */
     public function showResponse($text, $type = 'text')
     {
+        // todo styling it
         exit($text.PHP_EOL);
     }
-
 }

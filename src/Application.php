@@ -2,38 +2,44 @@
 
 namespace MongoClient;
 
+use MongoClient\DI\ContainerInsertionTrait;
 
+/**
+ * Class Application
+ * @package MongoClient
+ */
 class Application
 {
+    use ContainerInsertionTrait {
+        __construct as containerConstruct;
+    }
+
     private $config;
 
     private $commands;
 
-    private $services = [];
-
-    public function __construct(array $configApp, array $configCommand)
+    /**
+     * Application constructor. Set simple container and config arrays.
+     *
+     * @param $container
+     * @param array $configApp
+     * @param array $configCommand
+     */
+    public function __construct($container, array $configApp, array $configCommand)
     {
+        $this->containerConstruct($container);
         $this->config = $configApp;
         $this->commands = $configCommand;
-        $this->createServices();
     }
 
-    public function createServices()
-    {
-        $services = $this->config['services'];
-        if (empty($services)) {
-            return;
-        }
-
-        foreach ($services as $key=>$servicePath) {
-            $this->services[$key] = new $servicePath;
-        }
-    }
-
+    /**
+     * Handle command.
+     *
+     * @param $arguments
+     */
     public function handle($arguments)
     {
-        $this->services['console']->handle($arguments, $this->commands);
+        $container = $this->getContainer();
+        $container->getService('console')->handle($arguments, $this->commands);
     }
-
-
 }

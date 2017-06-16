@@ -2,7 +2,4 @@
 
 return [
     'database' => [],
-    'services' => [
-        'console' => 'MongoClient\\Console',
-    ]
 ];
