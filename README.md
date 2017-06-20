@@ -14,4 +14,13 @@ SELECT [<Projections>] [FROM <Target>]
 [SKIP <SkipRecords>]
 [LIMIT <MaxRecords>];
 ```
-sdfdfs
+where:
+- _Projections_ - can be `\*, field, field.subfield, field.\*` without any aggregation and so on
+- _Target_ - `collection_name` without any quotes
+- _Condition_ - without sub-conditions, only linear, like `\[A\] AND \[B\] OR \[C\]`. 
+Can use _AND_, _OR_ for logical combination, and `=, <>, >, >=, <, <=` operators for comparing fields with values
+- _Fields_ - fields names, separated by coma, with type of sorting `ASC|DESC`
+- _SkipRecords_ - number of record to skip
+- _MaxRecords_ - number of records to show
+
+All titles must be without quotes and other special characters.
