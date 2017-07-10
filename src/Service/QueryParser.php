@@ -54,7 +54,7 @@ class QueryParser implements QueryParserInterface
     public function parseMainQuery(array $keywords, string $text)
     {
         if (empty($keyword) && empty($text)) {
-            return null;
+            return [];
         }
 
         $positions = [];
@@ -72,7 +72,7 @@ class QueryParser implements QueryParserInterface
             $start = $position + strlen($key);
             $next = next($positions);
             if ($next === false) {
-                $next = strlen($text) - 1;
+                $next = strlen($text);
             }
             $lengthToNext = $next - $start;
             $parts[$key] = substr($text, $start, $lengthToNext);

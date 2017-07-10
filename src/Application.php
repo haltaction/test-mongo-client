@@ -5,8 +5,7 @@ namespace MongoClient;
 use MongoClient\DI\ContainerInsertionTrait;
 
 /**
- * Class Application
- * @package MongoClient
+ * Class Application.
  */
 class Application
 {
@@ -14,21 +13,19 @@ class Application
         __construct as containerConstruct;
     }
 
-    private $config;
-
     private $commands;
 
     /**
      * Application constructor. Set simple container and config arrays.
      *
-     * @param $container
+     * @param $container /MongoClient/DI/Container
      * @param array $configApp
      * @param array $configCommand
      */
     public function __construct($container, array $configApp, array $configCommand)
     {
         $this->containerConstruct($container);
-        $this->config = $configApp;
+        $this->getContainer()->getService('config_keeper')->loadConfig($configApp);
         $this->commands = $configCommand;
     }
 
