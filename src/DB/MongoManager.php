@@ -41,8 +41,8 @@ class MongoManager
     {
         $filter = $query['find'];
         $options = [
-            'limit' => $query['limit'],
-            'skip' => $query['skip'],
+            'limit' => (integer) $query['limit'],
+            'skip' => (integer) $query['skip'],
             'sort' => $query['sort'],
         ];
         if (!empty($query['fields'])) {
