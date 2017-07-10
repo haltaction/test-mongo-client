@@ -78,7 +78,7 @@ class Console implements ConsoleInterface
     {
         $commandName = strtolower($commandName);
         if (!in_array($commandName, array_keys($commandList))) {
-            throw new Exception('Command not found!', 404);
+            throw new Exception('Command not found! Try \'bin/mongo-client help\' for more information.', 404);
         }
 
         return $commandList[$commandName];
@@ -92,7 +92,13 @@ class Console implements ConsoleInterface
      */
     public function showResponse($text, $type = 'text')
     {
-        // todo styling it
+        $colors = [
+            'text'  => 0,
+            'error' => 31,
+            'info'  => 34
+        ];
+        $text = "\033[$colors[$type]m" . $text . "\033[0m";
+
         exit($text.PHP_EOL);
     }
 }
